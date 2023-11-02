@@ -1,0 +1,43 @@
+@font-face {
+    font-family: "Almarose-Regular";
+    src: url("./AlmaroseRegular/font.woff2") format("woff2"),
+        url("./AlmaroseRegular/font.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Almarose-Bold";
+    src: url("./AlmaroseBold/font.woff2") format("woff2"),
+        url("./AlmaroseBold/font.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Almarose-SemiBold";
+    src: url("./AlmaroseSemibold/font.woff2") format("woff2"),
+        url("./AlmaroseSemibold/font.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Almarose-Medium";
+    src: url("./AlmaroseMedium/font.woff2") format("woff2"),
+        url("./AlmaroseMedium/font.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Roboto-Bold";
+    src: url("./RobotoBold/Roboto-Bold.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Roboto-Regular";
+    src: url("./RobotoRegular/Roboto-Regular.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Roboto-Medium";
+    src: url("./RobotoMedium/Roboto-Medium.woff") format("woff");
+}
+
+html,
+body {
+    font-family: Almarose-Regular;
+}
