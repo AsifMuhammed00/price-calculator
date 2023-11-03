@@ -7,6 +7,11 @@ import MemberAssignmentSchema from "../auth/schema/member-assignment.schema";
 import AppSchema from "../auth/schema/app.schema";
 import BlackListedTokenSchema from "../auth/schema/blacklisted-token.schema";
 
+import ProductSchema from "../main/schema/product-schema";
+import LogSchema from "../main/schema/log-schema";
+
+
+
 import AdminValidation from "../auth/services/admin-validation.service";
 import UserLogin from "../auth/services/user-login.service";
 import {
@@ -59,6 +64,11 @@ import UpdateDashboardAccess from "../auth/services/update-dashboard-access.serv
 import GetAllDemoData from "../auth/services/demo-services/get-all-demo-data.service";
 import { deployDemoArchiveService, skipDemoArchiveService } from "../auth/services/demo-services/demo-deploy.service";
 
+import AddNewProduct  from "../main/services/add-prooduct.service";
+import ListAllProducts  from "../main/services/list-all-products.service";
+import AddToLog  from "../main/services/add-to-log.service";
+
+
 
 import createS3Volume from "./toolkit/providers/s3-volume";
 import createWebspaceVolume from "./toolkit/providers/webspace-blob";
@@ -66,6 +76,7 @@ import { createWSEmailProvider } from "./toolkit/providers/ws-email";
 import { loadEmailTemplate } from "./toolkit/helpers/loadEmailTemplate";
 
 import { EnquiryMetaSyncAutomator } from "./custom-types/enquiry/automation/metasync-automation";
+import getLogsService from "./services/get-logs.service";
 
 
 export default createModule(({ use, run }) => {
@@ -81,6 +92,9 @@ export default createModule(({ use, run }) => {
   useModel("member-assignment", MemberAssignmentSchema);
   useModel("app", AppSchema);
   useModel("blacklisted_token", BlackListedTokenSchema);
+  useModel("product", ProductSchema);
+  useModel("log", LogSchema);
+
 
   useService(AdminValidation);
   useService(UserLogin);
@@ -129,6 +143,13 @@ export default createModule(({ use, run }) => {
   useService(deployDemoArchiveService);
   useService(skipDemoArchiveService);
   useService(GetAllDemoData);
+
+  useService(AddNewProduct);
+  useService(ListAllProducts);
+  useService(AddToLog);
+  useService(getLogsService);
+
+
 
 
   useService(adminLauncherService, {

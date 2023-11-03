@@ -18,6 +18,9 @@ import LoginV2Page from "../auth/views/login-v2";
 import WelcomePage from "../auth/views/welcome-page";
 import UserAccountSettings from "../auth/views/user-account-settings";
 
+import Home from "../main/views/homepage";
+import addProductsPage from "../main/views/add-products-page";
+import logPage from "../main/views/log-page";
 
 import { initialiseWidgets } from "./widgets";
 
@@ -45,4 +48,9 @@ export default createModule(({ use }) => {
   useComponent("login-page-v2", LoginV2Page)
   useComponent("welcome-page", WelcomePage)
   useComponent("user-account-settings", UserAccountSettings)
+
+  useComponent("home", Home)
+  useComponent("add-product", addProductsPage)
+  useComponent("log", logPage)
+
 });

@@ -64,11 +64,11 @@ export default createComponent((props) => {
             .then((res) => {
                 setTimeout(() => {
                     setIsClosing(false);
-                    if (res.data === true) {
+                    // if (res.data === true) {
                         setCurrentState("login")
-                    } else {
-                        setCurrentState("signUp")
-                    }
+                    // } else {
+                    //     setCurrentState("signUp")
+                    // }
                 }, 1000);
             })
             .catch((e) => {
@@ -196,11 +196,11 @@ export default createComponent((props) => {
             <div className='logo-icon-wrapper'>
                 {/* <SkyslitColorFullLogoIcon style={{ fontSize: 33 }} /> */}
                 {/* <img src={CompanyLogo} width={140}></img> */}
-                <img src={generateFileLink(`${organisationDetails.marketinglogo}`)} style={{ width: "140px", objectFit: "contain" }} />
+                {/* <img src={generateFileLink(`${organisationDetails.marketinglogo}`)} style={{ width: "140px", objectFit: "contain" }} /> */}
             </div>
             <div style={{ paddingBottom: currentState === "signUp" ? 25 : "" }} className="card-wrapper" >
                 <h3 className="heading">{currentState === "login" ? "Sign in" : currentState === "signUp" ? "Create new account" : "Sign in"}</h3>
-                <span className="signin-description">{currentState === "signUp" ? "Set a new password to finalise" : "Enter your email to login or sign up"}</span>
+                <span className="signin-description">{currentState === "signUp" ? "Set a new password to finalise" : "Enter your email to login"}</span>
                 <div style={{ marginTop: currentState === "signUp" || currentState === "login" ? 30 : 50 }} className="label-field-wrapper">
                     <div style={{ flexDirection: "column", display: 'flex' }}>
                         {currentState === "default" ? (
@@ -288,10 +288,10 @@ export default createComponent((props) => {
                     </div>
                 </div>
             </div>
-            <div style={{ display: currentState !== "default" ? "none" : "flex" }} className="dont-have-account-wrapper">
+            {/* <div style={{ display: currentState !== "default" ? "none" : "flex" }} className="dont-have-account-wrapper">
                 <h5>Don’t have an account?</h5>
                 <h6>You can still enter your email, and we will guide you from there.</h6>
-            </div>
+            </div> */}
         </div>
     );
 });

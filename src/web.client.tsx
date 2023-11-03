@@ -91,10 +91,28 @@ export default createReactApp(({ use, useModule }) => {
       Route: useComponent("protectedRoute"),
     },
     {
+      path: "/home",
+      hideInMenu: true,
+      component: useComponent("main/home"),
+      Route: useComponent("protectedRoute"),
+    },
+    {
+      path: "/add-product",
+      hideInMenu: true,
+      component: useComponent("main/add-product"),
+      Route: useComponent("protectedRoute"),
+    },
+    {
+      path: "/log",
+      hideInMenu: true,
+      component: useComponent("main/log"),
+      Route: useComponent("protectedRoute"),
+    },
+    {
       path: "/",
       hideInMenu: true,
-      component: useComponent("main/welcome-page"),
-      // Route: useComponent("protectedRoute"),
+      component: useComponent("main/home"),
+      Route: useComponent("protectedRoute"),
     },
   ]);
 });
