@@ -10,10 +10,11 @@ import { Helmet } from "react-helmet-async";
 import Fade from "react-reveal/Fade";
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import moment from "moment";
+import './homepage.scss';
 
 const { Title } = Typography;
 const { Search } = Input;
-
+ 
 export default createComponent((props) => {
     const formRef = React.useRef();
     const history = useHistory();
@@ -139,81 +140,81 @@ export default createComponent((props) => {
         setItems(updatedSelectedItemsForLog);
     };
 
-    // const decrementQty = (item) => {
-    //     const updatedSelectedItems = selectedItems.map((selectedItem) => {
-    //       if (selectedItem._id === item._id) {
-    //         const updatedQty = Math.max(1, selectedItem.Qty - 1);
-    //         return { ...selectedItem, Qty: updatedQty, total: selectedItem.price * (selectedItem.Qty > 1 ? selectedItem.Qty - 1 : 1) };
-    //       }
-    //       return selectedItem;
-    //     });
-
-    //     // const updatedSelectedItemsForLog = items.map((selectedItem) => {
-    //     //     if (selectedItem.name === item.name) {
-    //     //       const updatedQty = Math.max(1, selectedItem.Qty - 1);
-    //     //       return { ...selectedItem, Qty: updatedQty, total: selectedItem.price * (selectedItem.Qty > 1 ? selectedItem.Qty - 1 : 1) };
-    //     //     }
-    //     //     return selectedItem;
-    //     //   });
-    //     setSelectedItems(updatedSelectedItems);
-    //     // setSelectedItems(updatedSelectedItemsForLog);
-
-    //   };
-      
-
     return (
         <>
-            <div style={{ padding: 16 }}>
+            <div className="home-page-main-section">
                 <Row gutter={16}>
-                    <Col span={12}>
-                        <Title level={4}>{moment().format('MMM DD')}</Title>
+                    <Col span={12} className="date-section-main">
+                        <Title level={4} className="date-section">{moment().format('MMM DD YYYY')}</Title> 
                     </Col>
                     <Col span={12} style={{ textAlign: 'right' }}>
-                        <Button type="primary" icon={<PlusOutlined />} size="large" onClick={showModal}>
+                        <Button type="primary" icon={<PlusOutlined />} size="large" onClick={showModal} className="add-button">
                             Add
                         </Button>
                     </Col>
                 </Row>
-
-                <Divider />
+                {selectedItems.length > 0 ? (
+                    <Divider className="product-divider"/>
+                ):(
+                    null
+                )}
+                
+                {selectedItems.length > 0 ? (
+                    <div className="items-whole-section">
+                        <span className="heading-main">Items</span>
+                    </div>
+                ):(
+                    null
+                )}
+                
                 {selectedItems.length > 0 ? (
                     selectedItems.map((item: any, index) => {
                         return (
-                            <Card style={{ width: '100%' }} key={index}>
-                                <Row align="middle" gutter={16}>
-                                    <Col span={4}>
-                                        <Button type="danger" icon={<MinusOutlined />} onClick={() => decrementQty(item)} disabled={item.Qty === 1} />
-                                    </Col>
-                                    <Col span={16}>
-                                        <Title level={5} style={{ margin: "unset",textTransform:"capitalize" }}>{item.productName}</Title>
-                                        <Title level={5} style={{ margin: "unset" }}>₹{item.price}</Title>
-                                        <Title level={5} style={{ margin: "unset" }}>Qty:{item.Qty}</Title>
-                                        <Title level={5} style={{ margin: "unset" }}>Total:{item.total}</Title>
-
-                                    </Col>
-                                    <Col span={4} style={{ textAlign: 'right' }}>
-                                        <Button type="primary" icon={<PlusOutlined />} onClick={() => incrementQty(item)}  />
-                                    </Col>
+                            <Card className="item-wrapper" key={index}>
+                                <Row align="middle" gutter={16} className="product-content-wrapper" style={{marginRight:"unset"}}>
+                                    <div className="title-section">
+                                        <Title level={5} className="name-wrapper">{item.productName}</Title>
+                                        <Title level={5} className="price-section">₹{item.price}/Ea</Title>
+                                    </div>
+                                    <div className="quantity-main-section">
+                                        <Col span={4} style={{padding:"unset"}}>
+                                            <Button className="minus-button" type="danger" icon={<MinusOutlined />} onClick={() => decrementQty(item)} disabled={item.Qty === 1} />
+                                        </Col>
+                                        <Col span={16} className="quantity-content">
+                                            <Title level={5} className="heading">{item.Qty}</Title>
+                                        </Col>
+                                        <Col span={4} style={{padding:"unset"}}>
+                                            <Button className="plus-button" type="primary" icon={<PlusOutlined />} onClick={() => incrementQty(item)} />
+                                        </Col>
+                                    </div>
+                                    <div>
+                                        <Title level={5} style={{ margin: "unset" }} className="total-price-product">₹{item.total}</Title>
+                                    </div>
                                 </Row>
                             </Card>
                         )
-                    })
+                    }) 
                 ) : (
                     <>
-                    <div>No Items Selected</div>
+                    {/* <div>No Items Selected</div>
                     <Button type="primary" href="/log" style={{marginTop:20}}>View Logs</Button><br/>
                     <Button type="primary" href="add-product" style={{marginTop:20}}>Add New Products</Button><br/>
-                    <Button type="danger" href="add-product" style={{marginTop:20}} onClick={logoutUser}>Logout</Button>
+                    <Button type="danger" href="add-product" style={{marginTop:20}} onClick={logoutUser}>Logout</Button> */}
                     </>
                 )}
 
+                {selectedItems.length > 0 ? (
+                    <Divider className="product-divider" />
+                ) : (
+                    null
+                )}
 
-                <Divider />
-
-                <Title level={4} style={{ textAlign: 'right',display:selectedItems.length > 0 ? undefined : "none" }}>
-                    Total: ₹{totalCost}
+                <Title level={4} style={{ textAlign: 'right',display:selectedItems.length > 0 ? undefined : "none" }} className="main-total-section">
+                    <span style={{color: "lightgray"}}>Total:</span> 
+                    <span style={{fontSize:"30px"}}>₹{totalCost}</span>
                 </Title>
-                <div style={{ textAlign: "center",display:selectedItems.length > 0 ? undefined : "none"}}><Button type="primary" onClick={handleAddToLog} disabled={addToLog.isLoading}>
+                <div style={{ textAlign: "center",display:selectedItems.length > 0 ? undefined : "none"}}>
+                    <Button type="primary" onClick={handleAddToLog} disabled={addToLog.isLoading} className="log-button">
                     {addToLog.isLoading ? (
                         "Adding..."
                     ):(
@@ -227,6 +228,7 @@ export default createComponent((props) => {
                     onCancel={handleCancel}
                     footer={null}
                     centered
+                    className="add-items-modal"
                 >
                     <Input
                         placeholder="Search items"
