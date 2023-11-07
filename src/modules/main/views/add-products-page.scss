@@ -1,0 +1,130 @@
+.add-products-whole-content-wrapper{
+    background: black;
+    .add-items-section{
+        padding: 20px 24px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+        .item-top-heading{
+            width: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .add-button{
+            color: white;
+            background: unset;
+            border: unset;
+            font-size: 25px;
+            padding: unset;
+            margin: unset;
+            display: flex;
+            align-items: center;
+            &:hover {
+                opacity: 0.8;
+                cursor: pointer;
+                border: 2px solid #40a9ff;
+            }
+            &:active {
+                transform: scale(0.98);
+            }
+            &:disabled{
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+    }
+    .all-item-wrapper{
+        margin: 25px 15px;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 10px;
+        background: #222222;
+        padding: 10px;
+        .product-details{
+            .product-name{
+                color: darkgray;
+                text-transform: capitalize;
+            }
+            .product-price{
+                color: darkgray;
+                margin: unset;
+            }
+        }
+        .icon-main-section{
+            .icon{
+                color: red;
+                font-size: 10px;
+            }
+        }
+    }
+}
+.add-item-modal{
+    .ant-modal-header{
+        border-radius: 15px 15px 0px 0px;
+        background: #959595db;
+        border-bottom: unset;
+    }
+    .ant-modal-content{
+        border-radius: 15px;
+        background: #222222;
+    }
+    .ant-modal-title{
+        color: white;
+    }
+    .ant-modal-footer{
+        border-top: unset;
+    }
+    .name-wrapper{
+        background: rgb(149 149 149 / 86%);
+        border: unset;
+        color: white;
+    }
+    .price-wrapper{
+        background: rgb(149 149 149 / 86%);
+        border: unset;
+        color: white;
+        width: 100%;
+    }
+    .ant-btn{
+        border-radius: 7px;
+        width: 70px;
+        color: gray;
+        &:hover {
+            opacity: 0.8;
+            cursor: pointer;
+            border: 2px solid #40a9ff;
+        }
+        &:active {
+            transform: scale(0.98);
+        }
+        &:disabled{
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+    .ant-modal-footer .ant-btn + .ant-btn:not(.ant-dropdown-trigger){
+        border-radius: 7px;
+        background: green;
+        color: white;
+        border: unset;
+        width: 70px;
+        &:hover {
+            opacity: 0.8;
+            cursor: pointer;
+            border: 2px solid #40a9ff;
+        }
+        &:active {
+            transform: scale(0.98);
+        }
+        &:disabled{
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+    .ant-modal-close-x{
+        display: none;
+    }
+}

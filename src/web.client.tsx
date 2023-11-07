@@ -91,6 +91,13 @@ export default createReactApp(({ use, useModule }) => {
       Route: useComponent("protectedRoute"),
     },
     {
+      path: "/sign-out",
+      hideInMenu: true,
+      component: useComponent("main/sign-out"),
+      layout: useLayout("main/add-product-layout"),
+      Route: useComponent("protectedRoute"),
+    },
+    {
       path: "/home",
       hideInMenu: true,
       component: useComponent("main/home"),
@@ -100,18 +107,21 @@ export default createReactApp(({ use, useModule }) => {
       path: "/add-product",
       hideInMenu: true,
       component: useComponent("main/add-product"),
+      layout: useLayout("main/add-product-layout"),
       Route: useComponent("protectedRoute"),
     },
     {
       path: "/log",
       hideInMenu: true,
       component: useComponent("main/log"),
+      layout: useLayout("main/add-product-layout"),
       Route: useComponent("protectedRoute"),
     },
     {
       path: "/",
       hideInMenu: true,
       component: useComponent("main/home"),
+      layout: useLayout("main/calculator-layout"),
       Route: useComponent("protectedRoute"),
     },
   ]);

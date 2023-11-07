@@ -1,0 +1,53 @@
+.log-section-main{
+    padding: 16px;
+    padding-bottom: 97px;
+    background: black;
+    .heading{
+        display: flex;
+        justify-content: center;
+        padding-bottom: 20px;
+        .top-heading{
+            color: white;
+        }
+    }
+    .date-main-section{
+        display: flex;
+        justify-content: center;
+        padding-bottom: 10px;
+        .date{
+            color: black;
+            background: white;
+            display: flex;
+            justify-content: center;
+            width: 55%;
+            height: 35px;
+            align-items: center;
+            border-radius: 8px;
+        }
+    }
+    .calendar-section{
+        width: 100%;
+        .ant-picker-calendar-header .ant-picker-calendar-mode-switch{
+            display: none;
+        }
+    }
+    .product-heading{
+        margin-top: 30px;
+        .heading-content{
+            color: white;
+        }
+        .odd-row-background tbody tr:nth-child(odd) {
+            background-color: #d5d5d5;
+        }
+    }
+    .total-section{
+        margin-top: 20px;
+        .amount-section-whole{
+            display: flex;
+            justify-content: end;
+            .amount{
+                color: white;
+            }
+        }
+    }
+}

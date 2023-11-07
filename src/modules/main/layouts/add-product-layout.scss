@@ -1,0 +1,22 @@
+.layout-main-section{
+    height: 100%;
+    .footer-wrapper{
+        background: #222222e0;
+        display: flex;
+        justify-content: space-between;
+        box-shadow: 10px 5px 10px #222222;
+        color: white;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        height: 80px;
+        .footer-buttons{
+            color: white;
+            .icon-section{
+                font-size: 20px;
+            }
+        }
+    }
+}

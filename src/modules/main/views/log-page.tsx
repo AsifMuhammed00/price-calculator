@@ -12,6 +12,7 @@ import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import type { CalendarProps } from 'antd';
 import type { Dayjs } from 'dayjs';
 import moment from "moment";
+import './log-page.scss';
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -22,7 +23,9 @@ export default createComponent((props) => {
     const history = useHistory();
     const { useService } = props.use(Frontend);
     const addToLog = useService({ serviceId: "get-logs" });
-    const [logDetails, setLogDetails] = React.useState()
+    const [logDetails, setLogDetails] = React.useState();
+    const [isCalendarOpen, setCalendarOpen] = React.useState();
+    const [selectedDate, setSelectedDate] = React.useState(null);
 
     const columns = [
         {
@@ -38,13 +41,8 @@ export default createComponent((props) => {
         },
     ];
 
-
-
-
-    const wrapperStyle: React.CSSProperties = {
-        width: 300,
-        border: `1px solid black`,
-        borderRadius: 3,
+    const wrapperStyle = {
+        display: isCalendarOpen ? 'block' : 'none'
     };
 
 
@@ -52,7 +50,7 @@ export default createComponent((props) => {
         const date = value ? value.format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
         addToLog.invoke({
             date
-        }, { force: true })
+        }, { force: true }) 
             .then((res) => {
                 console.log("res", res)
                 setLogDetails(res.data)
@@ -66,20 +64,36 @@ export default createComponent((props) => {
         onPanelChange()
     }, [])
 
+    const toggleCalendar = () => {
+        setCalendarOpen(!isCalendarOpen);
+    };
+
+    const onSelect = (value) => {
+        setSelectedDate(value);
+        setCalendarOpen(false);
+    };
+
     return (
         <>
-            <div style={{ padding: 16 }}>
-                <h2><b>Select Date to show the log</b></h2>
-                <div style={wrapperStyle}>
-                    <Calendar fullscreen={false} onChange={onPanelChange} />
+            <div className="log-section-main">
+                <h2 className="heading">
+                    <b className="top-heading">Logs</b>
+                </h2>
+                <div className="date-main-section" onClick={toggleCalendar}>
+                    <div className="date">{selectedDate ? selectedDate.format('DD MMM YY') : moment().format('DD MMM YY')}</div>
                 </div>
-                <div style={{marginTop:30}}>
-                    <h2><b>Sold Products</b></h2>
-                    <Table dataSource={logDetails?.products} columns={columns} pagination={false}/>
+                <div style={wrapperStyle} className="calendar-section">
+                    <Calendar fullscreen={false} onChange={onPanelChange} onSelect={onSelect}/>
                 </div>
-                <div style={{marginTop:20}}>
+                <div className="product-heading">
+                    <h2><b className="heading-content">Sold Products</b></h2>
+                    <Table dataSource={logDetails?.products} columns={columns} pagination={false} className="odd-row-background"/>
+                </div>
+                <div className="total-section">
                     {logDetails?.total ? (
-                        <h1><b>Total: ₹{logDetails?.total}</b></h1>
+                        <h1 className="amount-section-whole">
+                            <b className="amount">Total: ₹{logDetails?.total}</b>
+                        </h1>
                     ) : (
                         null
                     )}

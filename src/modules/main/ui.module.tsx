@@ -21,6 +21,11 @@ import UserAccountSettings from "../auth/views/user-account-settings";
 import Home from "../main/views/homepage";
 import addProductsPage from "../main/views/add-products-page";
 import logPage from "../main/views/log-page";
+import signOutPage from "../main/views/sign-out-page";
+
+
+import calculatorLayout from "../main/layouts/calculator-layout";
+import addProductLayout from "../main/layouts/add-product-layout";
 
 import { initialiseWidgets } from "./widgets";
 
@@ -52,5 +57,9 @@ export default createModule(({ use }) => {
   useComponent("home", Home)
   useComponent("add-product", addProductsPage)
   useComponent("log", logPage)
+  useComponent("sign-out", signOutPage)
+
+  useLayout("calculator-layout", calculatorLayout)
+  useLayout("add-product-layout", addProductLayout)
 
 });

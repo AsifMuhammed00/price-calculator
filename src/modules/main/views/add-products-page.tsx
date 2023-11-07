@@ -5,10 +5,11 @@ import { Col, Row, Typography, Layout, Button, Input, message, Divider, Card, Li
 import Lottie from "react-lottie";
 import AbstractBlue from "../assets/lottie-files/abstract-blue-and-yellow.json";
 import { useHistory } from "react-router-dom";
-import { LoadingOutlined } from '@ant-design/icons';
+import { CloseOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Helmet } from "react-helmet-async";
 import Fade from "react-reveal/Fade";
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import './add-products-page.scss';
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -100,50 +101,66 @@ export default createComponent((props) => {
     }, [])
 
     return (
-        <Layout>
+        <Layout style={{height:"100%"}}>
             <Header>
                 <Input placeholder="Search" onChange={(e)=>{setKeyword(e.target.value)}}/>
             </Header>
-            <Content>
-                <div style={{ padding: "20px 24px", background: "white", width: "100%" }}>
-                    <Button type="primary" onClick={() => { handleEditClick(), setMode("new") }}>Add New</Button>
+            <Content className="add-products-whole-content-wrapper">
+                <div className="add-items-section">
+                    <span className="item-top-heading">Items</span>
+                    <Button type="text" onClick={() => { handleEditClick(), setMode("new") }} className="add-button">
+                        <PlusOutlined/>
+                    </Button>
                 </div>
 
                 {filteredProducts.map((product: any, index) => (
-                    <Card
-                        key={index}
-                        title={product.productName}
-                        extra={<Button onClick={() => {
-                            handleEditClick(),
+                    <div key={index} className="all-item-wrapper" onClick={() => {
+                        handleEditClick(),
                             setMode("edit"),
                             setPrice(product.price),
                             setProductName(product.productName),
                             setProductId(product._id)
-                        }}>
-                            Edit</Button>}
-                    >
-                        <p>Price: {product.price}</p>
-                    </Card>
+                    }}>
+                        {/* <div>
+                            <Button onClick={() => {
+                                handleEditClick(),
+                                    setMode("edit"),
+                                    setPrice(product.price),
+                                    setProductName(product.productName),
+                                    setProductId(product._id)
+                            }}>Edit</Button>
+                        </div> */}
+                        <div className="product-details">
+                            <span className="product-name">{product.productName}</span>
+                            <p className="product-price">{product.price}₹/Ea</p>
+                        </div>
+                        <div className="icon-main-section">
+                            <CloseOutlined className="icon"/>
+                        </div>
+                    </div>
                 ))}
             </Content>
             <Modal
-                title="Edit Product"
+                title={addOrUpdateProduct.isLoading ? "Please Wait" : mode === "edit" ? "Edit Item" : "Add Item"}
                 visible={showEditModal}
                 onOk={mode === "new" ? addNewProduct : editProduct}
                 onCancel={handleModalCancel}
                 okButtonProps={{ disabled: addOrUpdateProduct.isLoading || !price || !productName }}
                 okText={addOrUpdateProduct.isLoading ? "Please Wait" : mode === "edit" ? "Edit" : "Add"}
+                className="add-item-modal"
             >
                 <Input
-                    placeholder="Product Name"
+                    placeholder="Product Name" 
                     value={productName}
                     onChange={(e) => setProductName(e.target.value)}
+                    className="name-wrapper"
                 />
                 <InputNumber
                     style={{ marginTop: 20 }}
                     placeholder="Product Price"
                     value={price}
                     onChange={(value:any) => setPrice(value)}
+                    className="price-wrapper"
                 />
 
             </Modal>
