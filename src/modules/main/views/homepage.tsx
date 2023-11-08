@@ -11,14 +11,15 @@ import Fade from "react-reveal/Fade";
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import moment from "moment";
 import './homepage.scss';
+import { Prompt } from 'react-router-dom';
 
 const { Title } = Typography;
 const { Search } = Input;
- 
+
 export default createComponent((props) => {
     const formRef = React.useRef();
     const history = useHistory();
-    const { useService,useContext } = props.use(Frontend);
+    const { useService, useContext } = props.use(Frontend);
 
     const context = useContext()
 
@@ -69,7 +70,7 @@ export default createComponent((props) => {
 
     const handleAddToLog = React.useCallback(() => {
         addToLog.invoke({
-            products : items,
+            products: items,
             totalPrice: totalCost
         }, { force: true })
             .then((res) => {
@@ -80,7 +81,7 @@ export default createComponent((props) => {
             .catch((e) => {
                 message.error(e.message)
             })
-    }, [totalCost,items])
+    }, [totalCost, items])
 
 
     const showModal = () => {
@@ -112,7 +113,7 @@ export default createComponent((props) => {
             setItems(items.filter((selectedItem: any) => selectedItem.productName !== item.productName))
         } else {
             setSelectedItems([...selectedItems, { ...item, Qty: 1, total: item.price }]);
-            setItems([...items, {  Qty: 1, total: item.price, productName:item.productName,price:item.price }]);
+            setItems([...items, { Qty: 1, total: item.price, productName: item.productName, price: item.price }]);
 
         }
     };
@@ -140,12 +141,31 @@ export default createComponent((props) => {
         setItems(updatedSelectedItemsForLog);
     };
 
+    React.useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            if (selectedItems.length > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+
+        window.onbeforeunload = handleBeforeUnload;
+
+        return () => {
+            window.onbeforeunload = null;
+        };
+    }, [selectedItems]);
+
     return (
         <>
+            <Prompt
+                when={selectedItems.length > 0}
+                message="Are you sure you want to leave this page? Your changes may not be saved."
+            />
             <div className="home-page-main-section">
                 <Row gutter={16}>
                     <Col span={12} className="date-section-main">
-                        <Title level={4} className="date-section">{moment().format('MMM DD YYYY')}</Title> 
+                        <Title level={4} className="date-section">{moment().format('MMM DD YYYY')}</Title>
                     </Col>
                     <Col span={12} style={{ textAlign: 'right' }}>
                         <Button type="primary" icon={<PlusOutlined />} size="large" onClick={showModal} className="add-button">
@@ -154,36 +174,36 @@ export default createComponent((props) => {
                     </Col>
                 </Row>
                 {selectedItems.length > 0 ? (
-                    <Divider className="product-divider"/>
-                ):(
+                    <Divider className="product-divider" />
+                ) : (
                     null
                 )}
-                
+
                 {selectedItems.length > 0 ? (
                     <div className="items-whole-section">
                         <span className="heading-main">Items</span>
                     </div>
-                ):(
+                ) : (
                     null
                 )}
-                
+
                 {selectedItems.length > 0 ? (
                     selectedItems.map((item: any, index) => {
                         return (
                             <Card className="item-wrapper" key={index}>
-                                <Row align="middle" gutter={16} className="product-content-wrapper" style={{marginRight:"unset"}}>
+                                <Row align="middle" gutter={16} className="product-content-wrapper" style={{ marginRight: "unset" }}>
                                     <div className="title-section">
                                         <Title level={5} className="name-wrapper">{item.productName}</Title>
                                         <Title level={5} className="price-section">₹{item.price}/Ea</Title>
                                     </div>
                                     <div className="quantity-main-section">
-                                        <Col span={4} style={{padding:"unset"}}>
+                                        <Col span={4} style={{ padding: "unset" }}>
                                             <Button className="minus-button" type="danger" icon={<MinusOutlined />} onClick={() => decrementQty(item)} disabled={item.Qty === 1} />
                                         </Col>
                                         <Col span={16} className="quantity-content">
                                             <Title level={5} className="heading">{item.Qty}</Title>
                                         </Col>
-                                        <Col span={4} style={{padding:"unset"}}>
+                                        <Col span={4} style={{ padding: "unset" }}>
                                             <Button className="plus-button" type="primary" icon={<PlusOutlined />} onClick={() => incrementQty(item)} />
                                         </Col>
                                     </div>
@@ -193,10 +213,10 @@ export default createComponent((props) => {
                                 </Row>
                             </Card>
                         )
-                    }) 
+                    })
                 ) : (
                     <>
-                    {/* <div>No Items Selected</div>
+                        {/* <div>No Items Selected</div>
                     <Button type="primary" href="/log" style={{marginTop:20}}>View Logs</Button><br/>
                     <Button type="primary" href="add-product" style={{marginTop:20}}>Add New Products</Button><br/>
                     <Button type="danger" href="add-product" style={{marginTop:20}} onClick={logoutUser}>Logout</Button> */}
@@ -209,17 +229,17 @@ export default createComponent((props) => {
                     null
                 )}
 
-                <Title level={4} style={{ textAlign: 'right',display:selectedItems.length > 0 ? undefined : "none" }} className="main-total-section">
-                    <span style={{color: "lightgray"}}>Total:</span> 
-                    <span style={{fontSize:"30px"}}>₹{totalCost}</span>
+                <Title level={4} style={{ textAlign: 'right', display: selectedItems.length > 0 ? undefined : "none" }} className="main-total-section">
+                    <span style={{ color: "lightgray" }}>Total:</span>
+                    <span style={{ fontSize: "30px" }}>₹{totalCost}</span>
                 </Title>
-                <div style={{ textAlign: "center",display:selectedItems.length > 0 ? undefined : "none"}}>
+                <div style={{ textAlign: "center", display: selectedItems.length > 0 ? undefined : "none" }}>
                     <Button type="primary" onClick={handleAddToLog} disabled={addToLog.isLoading} className="log-button">
-                    {addToLog.isLoading ? (
-                        "Adding..."
-                    ):(
-                        "Add to Log"
-                    )}
+                        {addToLog.isLoading ? (
+                            "Adding..."
+                        ) : (
+                            "Add to Log"
+                        )}
                     </Button></div>
 
                 <Modal
@@ -240,7 +260,7 @@ export default createComponent((props) => {
                             <Card style={{ margin: '8px 0', border: selectedItems.some((i: any) => i._id === item._id) ? "1px solid red" : undefined }} onClick={() => toggleSelection(item)} >
                                 <Row align="middle" gutter={16}>
                                     <Col span={16}>
-                                        <Title level={5} style={{textTransform:"capitalize"}}>{item.productName}</Title>
+                                        <Title level={5} style={{ textTransform: "capitalize" }}>{item.productName}</Title>
                                     </Col>
                                     <Col span={8} style={{ textAlign: 'right' }}>
                                         ₹{item.price}
