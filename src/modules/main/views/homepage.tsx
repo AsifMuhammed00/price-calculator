@@ -27,6 +27,7 @@ export default createComponent((props) => {
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [selectedItems, setSelectedItems] = React.useState([]);
     const [items, setItems] = React.useState([]);
+    const [show, setShow] = React.useState(false);
     const logoutService = useService({ serviceId: "user-logout" });
 
 
@@ -142,19 +143,15 @@ export default createComponent((props) => {
     };
 
     React.useEffect(() => {
-        const handleBeforeUnload = (e) => {
-            if (selectedItems.length > 0) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
+        setShow(true);
+        const handleBeforeUnload = () => {
+            setShow(false);
         };
-
-        window.onbeforeunload = handleBeforeUnload;
-
+        window.addEventListener('beforeunload', handleBeforeUnload);
         return () => {
-            window.onbeforeunload = null;
+            window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-    }, [selectedItems]);
+    }, []);
 
     return (
         <>
@@ -162,115 +159,117 @@ export default createComponent((props) => {
                 when={selectedItems.length > 0}
                 message="Are you sure you want to leave this page? Your changes may not be saved."
             />
-            <div className="home-page-main-section">
-                <Row gutter={16}>
-                    <Col span={12} className="date-section-main">
-                        <Title level={4} className="date-section">{moment().format('MMM DD YYYY')}</Title>
-                    </Col>
-                    <Col span={12} style={{ textAlign: 'right' }}>
-                        <Button type="primary" icon={<PlusOutlined />} size="large" onClick={showModal} className="add-button">
-                            Add
-                        </Button>
-                    </Col>
-                </Row>
-                {selectedItems.length > 0 ? (
-                    <Divider className="product-divider" />
-                ) : (
-                    null
-                )}
+            <Fade duration={2000}>
+                <div className={`home-page-main-section ${show ? 'fade-enter-active' : 'fade-exit-active'}`}>
+                    <Row gutter={16}>
+                        <Col span={12} className="date-section-main">
+                            <Title level={4} className="date-section">{moment().format('MMM DD YYYY')}</Title>
+                        </Col>
+                        <Col span={12} style={{ textAlign: 'right' }}>
+                            <Button type="primary" icon={<PlusOutlined />} size="large" onClick={showModal} className="add-button">
+                                Add
+                            </Button>
+                        </Col>
+                    </Row>
+                    {selectedItems.length > 0 ? (
+                        <Divider className="product-divider" />
+                    ) : (
+                        null
+                    )}
 
-                {selectedItems.length > 0 ? (
-                    <div className="items-whole-section">
-                        <span className="heading-main">Items</span>
-                    </div>
-                ) : (
-                    null
-                )}
+                    {selectedItems.length > 0 ? (
+                        <div className="items-whole-section">
+                            <span className="heading-main">Items</span>
+                        </div>
+                    ) : (
+                        null
+                    )}
 
-                {selectedItems.length > 0 ? (
-                    selectedItems.map((item: any, index) => {
-                        return (
-                            <Card className="item-wrapper" key={index}>
-                                <Row align="middle" gutter={16} className="product-content-wrapper" style={{ marginRight: "unset" }}>
-                                    <div className="title-section">
-                                        <Title level={5} className="name-wrapper">{item.productName}</Title>
-                                        <Title level={5} className="price-section">₹{item.price}/Ea</Title>
-                                    </div>
-                                    <div className="quantity-main-section">
-                                        <Col span={4} style={{ padding: "unset" }}>
-                                            <Button className="minus-button" type="danger" icon={<MinusOutlined />} onClick={() => decrementQty(item)} disabled={item.Qty === 1} />
+                    {selectedItems.length > 0 ? (
+                        selectedItems.map((item: any, index) => {
+                            return (
+                                <Card className="item-wrapper" key={index}>
+                                    <Row align="middle" gutter={16} className="product-content-wrapper" style={{ marginRight: "unset" }}>
+                                        <div className="title-section">
+                                            <Title level={5} className="name-wrapper">{item.productName}</Title>
+                                            <Title level={5} className="price-section">₹{item.price}/Ea</Title>
+                                        </div>
+                                        <div className="quantity-main-section">
+                                            <Col span={4} style={{ padding: "unset" }}>
+                                                <Button className="minus-button" type="danger" icon={<MinusOutlined />} onClick={() => decrementQty(item)} disabled={item.Qty === 1} />
+                                            </Col>
+                                            <Col span={16} className="quantity-content">
+                                                <Title level={5} className="heading">{item.Qty}</Title>
+                                            </Col>
+                                            <Col span={4} style={{ padding: "unset" }}>
+                                                <Button className="plus-button" type="primary" icon={<PlusOutlined />} onClick={() => incrementQty(item)} />
+                                            </Col>
+                                        </div>
+                                        <div>
+                                            <Title level={5} style={{ margin: "unset" }} className="total-price-product">₹{item.total}</Title>
+                                        </div>
+                                    </Row>
+                                </Card>
+                            )
+                        })
+                    ) : (
+                        <>
+                            <div className="empty-state">
+                                <span>No Items Added</span>
+                            </div>
+
+                        </>
+                    )}
+
+                    {selectedItems.length > 0 ? (
+                        <Divider className="product-divider" />
+                    ) : (
+                        null
+                    )}
+
+                    <Title level={4} style={{ textAlign: 'right', display: selectedItems.length > 0 ? undefined : "none" }} className="main-total-section">
+                        <span style={{ color: "lightgray" }}>Total:</span>
+                        <span style={{ fontSize: "30px" }}>₹{totalCost}</span>
+                    </Title>
+                    <div style={{ textAlign: "center", display: selectedItems.length > 0 ? undefined : "none" }}>
+                        <Button type="primary" onClick={handleAddToLog} disabled={addToLog.isLoading} className="log-button">
+                            {addToLog.isLoading ? (
+                                "Adding..."
+                            ) : (
+                                "Add to Log"
+                            )}
+                        </Button></div>
+
+                    <Modal
+                        title="Add Items"
+                        visible={isModalVisible}
+                        onCancel={handleCancel}
+                        footer={null}
+                        centered
+                        className="add-items-modal"
+                    >
+                        <Input
+                            placeholder="Search items"
+                            onChange={(e) => { setKeyword(e.target.value) }}
+                        />
+                        <List
+                            dataSource={filteredProducts}
+                            renderItem={(item: any) => (
+                                <Card style={{ margin: '8px 0', border: selectedItems.some((i: any) => i._id === item._id) ? "1px solid red" : undefined }} onClick={() => toggleSelection(item)} >
+                                    <Row align="middle" gutter={16}>
+                                        <Col span={16}>
+                                            <Title level={5} style={{ textTransform: "capitalize" }}>{item.productName}</Title>
                                         </Col>
-                                        <Col span={16} className="quantity-content">
-                                            <Title level={5} className="heading">{item.Qty}</Title>
+                                        <Col span={8} style={{ textAlign: 'right' }}>
+                                            ₹{item.price}
                                         </Col>
-                                        <Col span={4} style={{ padding: "unset" }}>
-                                            <Button className="plus-button" type="primary" icon={<PlusOutlined />} onClick={() => incrementQty(item)} />
-                                        </Col>
-                                    </div>
-                                    <div>
-                                        <Title level={5} style={{ margin: "unset" }} className="total-price-product">₹{item.total}</Title>
-                                    </div>
-                                </Row>
-                            </Card>
-                        )
-                    })
-                ) : (
-                    <>
-                        {/* <div>No Items Selected</div>
-                    <Button type="primary" href="/log" style={{marginTop:20}}>View Logs</Button><br/>
-                    <Button type="primary" href="add-product" style={{marginTop:20}}>Add New Products</Button><br/>
-                    <Button type="danger" href="add-product" style={{marginTop:20}} onClick={logoutUser}>Logout</Button> */}
-                    </>
-                )}
-
-                {selectedItems.length > 0 ? (
-                    <Divider className="product-divider" />
-                ) : (
-                    null
-                )}
-
-                <Title level={4} style={{ textAlign: 'right', display: selectedItems.length > 0 ? undefined : "none" }} className="main-total-section">
-                    <span style={{ color: "lightgray" }}>Total:</span>
-                    <span style={{ fontSize: "30px" }}>₹{totalCost}</span>
-                </Title>
-                <div style={{ textAlign: "center", display: selectedItems.length > 0 ? undefined : "none" }}>
-                    <Button type="primary" onClick={handleAddToLog} disabled={addToLog.isLoading} className="log-button">
-                        {addToLog.isLoading ? (
-                            "Adding..."
-                        ) : (
-                            "Add to Log"
-                        )}
-                    </Button></div>
-
-                <Modal
-                    title="Add Items"
-                    visible={isModalVisible}
-                    onCancel={handleCancel}
-                    footer={null}
-                    centered
-                    className="add-items-modal"
-                >
-                    <Input
-                        placeholder="Search items"
-                        onChange={(e) => { setKeyword(e.target.value) }}
-                    />
-                    <List
-                        dataSource={filteredProducts}
-                        renderItem={(item: any) => (
-                            <Card style={{ margin: '8px 0', border: selectedItems.some((i: any) => i._id === item._id) ? "1px solid red" : undefined }} onClick={() => toggleSelection(item)} >
-                                <Row align="middle" gutter={16}>
-                                    <Col span={16}>
-                                        <Title level={5} style={{ textTransform: "capitalize" }}>{item.productName}</Title>
-                                    </Col>
-                                    <Col span={8} style={{ textAlign: 'right' }}>
-                                        ₹{item.price}
-                                    </Col>
-                                </Row>
-                            </Card>
-                        )}
-                    />
-                </Modal>
-            </div>
+                                    </Row>
+                                </Card>
+                            )}
+                        />
+                    </Modal>
+                </div>
+            </Fade>
         </>
     );
 });

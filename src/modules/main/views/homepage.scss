@@ -1,6 +1,14 @@
  .home-page-main-section{
     padding: 16px;
     background: black;
+    .empty-state{
+        color: white;
+        height: 65vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+    }
     .date-section-main{
         display: flex;
         align-items: center;
