@@ -26,6 +26,7 @@ export default createComponent((props) => {
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [selectedItems, setSelectedItems] = React.useState([]);
     const [items, setItems] = React.useState([]);
+    const [show, setShow] = React.useState(false);
     const logoutService = useService({ serviceId: "user-logout" });
 
 
@@ -140,9 +141,21 @@ export default createComponent((props) => {
         setItems(updatedSelectedItemsForLog);
     };
 
+    React.useEffect(() => {
+        setShow(true);
+        const handleBeforeUnload = () => {
+            setShow(false);
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
     return (
         <>
-            <div className="home-page-main-section">
+        <Fade duration={2000}>
+            <div className={`home-page-main-section ${show ? 'fade-enter-active' : 'fade-exit-active'}`}>
                 <Row gutter={16}>
                     <Col span={12} className="date-section-main">
                         <Title level={4} className="date-section">{moment().format('MMM DD YYYY')}</Title> 
@@ -196,10 +209,9 @@ export default createComponent((props) => {
                     }) 
                 ) : (
                     <>
-                    {/* <div>No Items Selected</div>
-                    <Button type="primary" href="/log" style={{marginTop:20}}>View Logs</Button><br/>
-                    <Button type="primary" href="add-product" style={{marginTop:20}}>Add New Products</Button><br/>
-                    <Button type="danger" href="add-product" style={{marginTop:20}} onClick={logoutUser}>Logout</Button> */}
+                        <div className="empty-state">
+                            <span>No Items Added</span>
+                        </div>
                     </>
                 )}
 
@@ -251,6 +263,7 @@ export default createComponent((props) => {
                     />
                 </Modal>
             </div>
+            </Fade>
         </>
     );
 });

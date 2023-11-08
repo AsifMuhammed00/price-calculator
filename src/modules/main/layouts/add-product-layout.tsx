@@ -4,6 +4,8 @@ import { Layout,message,Button,Dropdown} from 'antd';
 import {Link} from 'react-router-dom';
 import './calculator-layout.scss';
 import {
+    BookOutlined,
+    CodeSandboxOutlined,
     HomeOutlined, LockOutlined, SearchOutlined, UserOutlined   
   } from '@ant-design/icons';
  
@@ -18,8 +20,8 @@ export default createComponent((props) => {
             </Content>
             <Footer className="footer-wrapper">
                 <Link to="/" className="footer-buttons"><HomeOutlined className="icon-section"/></Link>
-                <Link to="/log" className="footer-buttons"><SearchOutlined className="icon-section"/></Link>
-                <Link to="/add-product" className="footer-buttons"><LockOutlined className="icon-section"/></Link>
+                <Link to="/log" className="footer-buttons"><BookOutlined className="icon-section"/></Link>
+                <Link to="/add-product" className="footer-buttons"><CodeSandboxOutlined className="icon-section"/></Link>
                 <Link to="/sign-out" className="footer-buttons"><UserOutlined className="icon-section" /></Link>
             </Footer>
         </Layout>

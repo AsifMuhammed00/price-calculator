@@ -1,6 +1,6 @@
 import React from "react";
 import { createComponent, Frontend } from "@skyslit/ark-frontend";
-import { Col, Row, Typography, Layout, Button, Input, message, Divider, Card, List, Modal, InputNumber } from "antd";
+import { Col, Row, Typography, Layout, Button, Input, message, Divider, Card, List, Modal, InputNumber,Skeleton, Space  } from "antd";
 // import '../styles/admin-page.scss';
 import Lottie from "react-lottie";
 import AbstractBlue from "../assets/lottie-files/abstract-blue-and-yellow.json";
@@ -13,7 +13,8 @@ import './add-products-page.scss';
 
 const { Title } = Typography;
 const { Search } = Input;
-const { Header, Content } = Layout;
+const { Header, Content } = Layout; 
+
 
 export default createComponent((props) => {
     const { useService } = props.use(Frontend);
@@ -100,8 +101,21 @@ export default createComponent((props) => {
         handleListAllProduct()
     }, [])
 
+    if (listAllProduct.isLoading) {
+        return (
+            <>
+                <div style={{padding: "70px 25px 0px 25px"}}>
+                    <Skeleton />
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around",padding: "25px"}}>
+                    <Skeleton.Button active={true} shape='square' className="skeleton-button"/>
+                </div>
+            </>
+        );
+    }
+    
     return (
-        <Layout style={{height:"100%"}}>
+        <Layout>
             <Header>
                 <Input placeholder="Search" onChange={(e)=>{setKeyword(e.target.value)}}/>
             </Header>
@@ -113,40 +127,41 @@ export default createComponent((props) => {
                     </Button>
                 </div>
 
-                {filteredProducts.map((product: any, index) => (
-                    <div key={index} className="all-item-wrapper" onClick={() => {
-                        handleEditClick(),
-                            setMode("edit"),
-                            setPrice(product.price),
-                            setProductName(product.productName),
-                            setProductId(product._id)
-                    }}>
-                        {/* <div>
-                            <Button onClick={() => {
-                                handleEditClick(),
-                                    setMode("edit"),
-                                    setPrice(product.price),
-                                    setProductName(product.productName),
-                                    setProductId(product._id)
-                            }}>Edit</Button>
-                        </div> */}
-                        <div className="product-details">
-                            <span className="product-name">{product.productName}</span>
-                            <p className="product-price">{product.price}₹/Ea</p>
+                    {filteredProducts.map((product: any, index) => (
+                        <div key={index} className="all-item-wrapper" onClick={() => {
+                            handleEditClick(),
+                                setMode("edit"),
+                                setPrice(product.price),
+                                setProductName(product.productName),
+                                setProductId(product._id)
+                        }}>
+                            {/* <div>
+                                <Button onClick={() => {
+                                    handleEditClick(),
+                                        setMode("edit"),
+                                        setPrice(product.price),
+                                        setProductName(product.productName),
+                                        setProductId(product._id)
+                                }}>Edit</Button>
+                            </div> */}
+                            <div className="product-details">
+                                <span className="product-name">{product.productName}</span>
+                                <p className="product-price">{product.price}₹/Ea</p>
+                            </div>
+                            <div className="icon-main-section">
+                                <CloseOutlined className="icon"/>
+                            </div>
                         </div>
-                        <div className="icon-main-section">
-                            <CloseOutlined className="icon"/>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                
             </Content>
             <Modal
-                title={addOrUpdateProduct.isLoading ? "Please Wait" : mode === "edit" ? "Edit Item" : "Add Item"}
+                title={addOrUpdateProduct.isLoading ? "Please Wait" : mode === "edit" ? "Edit Item" : "Add Item"} 
                 visible={showEditModal}
                 onOk={mode === "new" ? addNewProduct : editProduct}
                 onCancel={handleModalCancel}
                 okButtonProps={{ disabled: addOrUpdateProduct.isLoading || !price || !productName }}
-                okText={addOrUpdateProduct.isLoading ? "Please Wait" : mode === "edit" ? "Edit" : "Add"}
+                okText={addOrUpdateProduct.isLoading ? <LoadingOutlined/> : mode === "edit" ? "Edit" : "Add"}
                 className="add-item-modal"
             >
                 <Input

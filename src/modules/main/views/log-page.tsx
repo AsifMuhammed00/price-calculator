@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; 
 import { createComponent, Frontend } from "@skyslit/ark-frontend";
 import { Col, Row, Typography, Form, Button, Input, message, Divider, Card, List, Modal, Calendar, theme, Table } from "antd";
 // import '../styles/admin-page.scss';
@@ -26,6 +26,8 @@ export default createComponent((props) => {
     const [logDetails, setLogDetails] = React.useState();
     const [isCalendarOpen, setCalendarOpen] = React.useState();
     const [selectedDate, setSelectedDate] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
+    const [show, setShow] = React.useState(false);
 
     const columns = [
         {
@@ -73,9 +75,21 @@ export default createComponent((props) => {
         setCalendarOpen(false);
     };
 
+    React.useEffect(() => {
+        setShow(true);
+        const handleBeforeUnload = () => {
+            setShow(false);
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
     return (
         <>
-            <div className="log-section-main">
+        <Fade duration={2000}>
+            <div className={`log-section-main ${show ? 'fade-enter-active' : 'fade-exit-active'}`}>
                 <h2 className="heading">
                     <b className="top-heading">Logs</b>
                 </h2>
@@ -87,7 +101,7 @@ export default createComponent((props) => {
                 </div>
                 <div className="product-heading">
                     <h2><b className="heading-content">Sold Products</b></h2>
-                    <Table dataSource={logDetails?.products} columns={columns} pagination={false} className="odd-row-background"/>
+                    <Table dataSource={logDetails?.products} columns={columns} pagination={false} loading={!logDetails?.products} className="odd-row-background"/>
                 </div>
                 <div className="total-section">
                     {logDetails?.total ? (
@@ -99,6 +113,7 @@ export default createComponent((props) => {
                     )}
                 </div>
             </div>
+            </Fade>
         </>
     );
 });
